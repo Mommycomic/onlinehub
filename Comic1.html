@@ -1,0 +1,369 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mommycomic - Story Title</title>
+    <style>
+        /* --- General Reset & Base Styles --- */
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: #1a1a1a; /* Primary dark from theme */
+            color: #f0f0f0; /* Light text color */
+            line-height: 1.6;
+            overflow-x: hidden; /* Prevent horizontal scroll */
+            padding: 20px 0; /* Add some vertical padding for the whole page */
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #2b2b2b; /* Slightly lighter dark for content areas */
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        /* --- Back Button Styling --- */
+        .back-button {
+            display: inline-flex; /* Allows icon and text to sit nicely */
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.08); /* Semi-transparent background */
+            color: #6EE7B7; /* Accent green text */
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            margin-bottom: 20px; /* Space below the button */
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            font-weight: 600;
+            font-size: 1em;
+            cursor: pointer;
+            border: none; /* Remove default button border */
+            outline: none; /* Remove outline on focus */
+        }
+
+        .back-button:hover {
+            background-color: rgba(255, 255, 255, 0.15); /* Darker on hover */
+            transform: translateY(-2px); /* Slight lift on hover */
+        }
+
+        .back-button::before {
+            content: '←'; /* Left arrow character */
+            font-size: 1.2em;
+            margin-right: 8px;
+        }
+
+        /* --- Header Section --- */
+        .detail-header {
+            display: flex;
+            flex-direction: column; /* Stack on small screens */
+            align-items: center;
+            text-align: center;
+            padding-bottom: 30px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 30px;
+        }
+
+        /* --- Book Cover (using background-image for reliability) --- */
+        .book-cover-display {
+            width: 250px; /* Fixed width for the cover area */
+            height: 380px; /* Fixed height for the cover area */
+            margin-bottom: 25px; /* Spacing below cover */
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden; /* Ensures rounded corners */
+
+            /* Background image properties */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+
+            /* Animation */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .book-cover-display:hover {
+            transform: scale(1.03); /* Slight enlargement */
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6); /* More prominent shadow */
+        }
+
+        /* --- Text Content --- */
+        h1 {
+            font-size: 2.8em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #ffffff; /* Secondary light from theme */
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        .book-author-tags {
+            font-size: 1.1em;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 15px;
+        }
+
+        .tag {
+            background-color: #C084FC; /* Accent purple */
+            color: #ffffff;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            margin: 0 5px;
+            display: inline-block; /* For inline display with spacing */
+        }
+
+        .book-rating {
+            font-size: 1.2em;
+            color: #6EE7B7; /* Accent green */
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+
+        .book-rating::before {
+            content: '⭐ ';
+        }
+
+        .book-review {
+            font-style: italic;
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 20px;
+            padding: 15px 20px;
+            border-left: 4px solid #6EE7B7; /* Accent green border */
+            background-color: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+        }
+
+        /* --- Pages Section (Paged Viewer) --- */
+        .book-pages-section {
+            padding: 30px 0;
+            text-align: center;
+        }
+
+        .book-pages-section h2 {
+            font-size: 2em;
+            color: #ffffff;
+            margin-bottom: 25px;
+        }
+
+        .page-reader-controls-top { /* New class for top controls */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px; /* Space below controls */
+            flex-wrap: wrap; /* Allow wrapping on small screens */
+        }
+
+        .page-reader-button {
+            background-color: #C084FC; /* Accent purple */
+            color: #ffffff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .page-reader-button:hover:not(:disabled) {
+            background-color: #A78BFA; /* Lighter purple on hover */
+            transform: translateY(-2px);
+        }
+
+        .page-reader-button:disabled {
+            background-color: rgba(192, 132, 252, 0.5); /* Faded purple when disabled */
+            cursor: not-allowed;
+        }
+
+        .page-counter {
+            font-size: 1.1em;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .page-display-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 400px; /* Ensure some height even if image is slow to load */
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .page-display-container img {
+            max-width: 100%; /* Image fills container */
+            height: auto; /* Maintain aspect ratio */
+            display: block;
+        }
+
+        /* --- Responsive Adjustments --- */
+        @media (min-width: 768px) {
+            .detail-header {
+                flex-direction: row; /* Side-by-side on larger screens */
+                text-align: left;
+                align-items: flex-start;
+            }
+            .book-cover-display {
+                margin-right: 40px; /* Space between cover and text */
+                margin-bottom: 0;
+                flex-shrink: 0; /* Prevent cover from shrinking */
+            }
+            .header-content {
+                flex-grow: 1; /* Allow content to take remaining space */
+            }
+            h1 {
+                font-size: 3.5em;
+            }
+            .book-author-tags {
+                font-size: 1.3em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+            h1 {
+                font-size: 2.2em;
+            }
+            .book-author-tags {
+                font-size: 1em;
+            }
+            .book-cover-display {
+                width: 200px;
+                height: 300px;
+            }
+            .page-reader-controls-top { /* Also allow wrapping on very small screens */
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Back Button -->
+        <button class="back-button" onclick="window.history.back()">Back to Home</button>
+
+        <div class="detail-header">
+            <!-- Book Cover -->
+            <div class="book-cover-display" id="bookCoverDisplay"></div>
+            
+            <!-- Header Content -->
+            <div class="header-content">
+                <h1 class="book-title" id="bookTitle"></h1>
+                <p class="book-author-tags" id="bookAuthorTags"></p>
+                <div class="book-rating" id="bookRating"></div>
+                <p class="book-review" id="bookReview"></p>
+            </div>
+        </div>
+
+        <!-- Pages Section (Paged Viewer) -->
+        <div class="book-pages-section">
+            <h2>Read Book/Comic</h2>
+            <!-- Page Reader Controls - Moved to Top -->
+            <div class="page-reader-controls-top">
+                <button id="prevPageBtn" class="page-reader-button">Previous Page</button>
+                <span id="pageCounter" class="page-counter"></span>
+                <button id="nextPageBtn" class="page-reader-button">Next Page</button>
+            </div>
+
+            <div class="page-display-container">
+                <img id="currentPageImage" alt="Comic Page">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Data Source for the Page ---
+        const bookData = {
+            id: 'your-unique-book-id',
+            title: "Tales of the Whispering Woods",
+            author: "Fable Weaver",
+            tags: ["Fantasy", "Nature", "Adventure", "Mystical"],
+            rating: 4.7,
+            review: "Immerse yourself in a magical world where ancient trees whisper secrets and mystical creatures roam. A truly enchanting read for all fantasy lovers!",
+            // --- Image URLs (using reliable placehold.co) ---
+            coverImageUrl: "/Src/Images/1/Comic1_1.jpg", // Verified URL
+            pageImageUrls: [
+                "/Src/Images/1/Comic1_1.jpg", // Verified URL
+                "/Src/Images/1/Comic1_2.jpg", // Verified URL
+                "https://placehold.co/800x1200/C084FC/1a1a1a?text=Chapter+3", // Verified URL
+                "https://placehold.co/800x1200/6EE7B7/1a1a1a?text=Chapter+4", // Verified URL
+                "https://placehold.co/800x1200/C084FC/1a1a1a?text=Chapter+5", // Verified URL
+                "https://placehold.co/800x1200/6EE7B7/1a1a1a?text=Chapter+6", // Verified URL
+                "https://placehold.co/800x1200/C084FC/1a1a1a?text=Chapter+7", // Verified URL
+                "https://placehold.co/800x1200/6EE7B7/1a1a1a?text=Chapter+8", // Verified URL
+                "https://placehold.co/800x1200/C084FC/1a1a1a?text=Chapter+9", // Verified URL
+                "https://placehold.co/800x1200/6EE7B7/1a1a1a?text=Chapter+10" // Verified URL
+            ]
+        };
+
+        // --- JavaScript for Dynamic Content Loading and Paged Viewer ---
+        let currentPageIndex = 0; // Tracks the current page shown
+
+        const bookCoverDisplay = document.getElementById('bookCoverDisplay');
+        const bookTitle = document.getElementById('bookTitle');
+        const bookAuthorTags = document.getElementById('bookAuthorTags');
+        const bookRating = document.getElementById('bookRating');
+        const bookReview = document.getElementById('bookReview');
+
+        const currentPageImage = document.getElementById('currentPageImage');
+        const prevPageBtn = document.getElementById('prevPageBtn');
+        const nextPageBtn = document.getElementById('nextPageBtn');
+        const pageCounter = document.getElementById('pageCounter');
+
+        function updatePageDisplay() {
+            // Update the image source
+            currentPageImage.src = bookData.pageImageUrls[currentPageIndex];
+            
+            // Update the page counter text
+            pageCounter.textContent = `Page ${currentPageIndex + 1} of ${bookData.pageImageUrls.length}`;
+
+            // Enable/Disable buttons based on current page index
+            prevPageBtn.disabled = currentPageIndex === 0;
+            nextPageBtn.disabled = currentPageIndex === bookData.pageImageUrls.length - 1;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Populate header content
+            bookCoverDisplay.style.backgroundImage = `url('${bookData.coverImageUrl}')`;
+            bookTitle.textContent = bookData.title;
+            
+            bookAuthorTags.innerHTML = `By ${bookData.author}`; 
+            bookData.tags.forEach(tagText => {
+                const tagSpan = document.createElement('span');
+                tagSpan.className = 'tag';
+                tagSpan.textContent = tagText;
+                bookAuthorTags.appendChild(tagSpan);
+            });
+            bookRating.textContent = bookData.rating.toFixed(1);
+            bookReview.textContent = bookData.review;
+
+            // Initialize the page viewer
+            updatePageDisplay(); // Display the first page
+
+            // Add event listeners for page navigation
+            prevPageBtn.addEventListener('click', () => {
+                if (currentPageIndex > 0) {
+                    currentPageIndex--;
+                    updatePageDisplay();
+                }
+            });
+
+            nextPageBtn.addEventListener('click', () => {
+                if (currentPageIndex < bookData.pageImageUrls.length - 1) {
+                    currentPageIndex++;
+                    updatePageDisplay();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+
